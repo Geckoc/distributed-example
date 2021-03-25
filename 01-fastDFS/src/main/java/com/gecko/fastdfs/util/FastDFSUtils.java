@@ -39,9 +39,6 @@ public class FastDFSUtils {
         // System.out.println(fileInfo);
         // boolean delete = fileDelete("group1", "M00/00/00/wKi2gGBatGqAPp3bACoeC5KngBs6975405");
         fileDownload("group1", "M00/00/00/wKi2gGBatYiASR5EACoeC5KngBs842.jpg", "D:/888.jpg");
-        String fileExt = getFileExt("hellllll.gif");
-        System.out.println(fileExt);
-
     }
 
     /**
@@ -86,6 +83,31 @@ public class FastDFSUtils {
     }
 
     /**
+     * 文件上传
+     * @param bytes            byte字节数组
+     * @param fileExtName      文件拓展名[后缀]
+     * @return 组名/远程文件名   group1/M00/00/00/....
+     */
+    public static String fileUpload(byte[] bytes, String fileExtName) {
+        try {
+            String[] uploadFile = storageClient.upload_file(bytes, fileExtName, null);
+            for (String str : uploadFile) {
+                System.out.println(str);
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("http://192.168.182.128/");
+            stringBuilder.append(uploadFile[0]);
+            stringBuilder.append("/");
+            stringBuilder.append(uploadFile[1]);
+            return stringBuilder.toString();
+        } catch (IOException | MyException e) {
+            e.printStackTrace();
+        } finally {
+            releaseFastDFS();
+        }
+        return null;
+    }
+    /**
      * 文件下载
      * @param groupName       组/卷名，默认值：group1
      * @param remoteFileName  文件名，例如："M00/00/00/wKgKZl9tkTCAJAanAADhaCZ_RF0495.jpg"
@@ -105,6 +127,28 @@ public class FastDFSUtils {
         return count;
     }
 
+    /**
+     * 修改一个已经存在的文件
+     *
+     * @param oldGroupName 旧组名
+     * @param oldFileName  旧文件名
+     * @param bytes         新文件
+     * @param fileName     新文件名
+     * @return
+     */
+    public static String modifyFile(String oldGroupName, String oldFileName, byte[] bytes, String fileName) {
+        // 先上传
+        String fileUpload = fileUpload(bytes, fileName);
+        if (fileUpload == null) {
+            return null;
+        }
+        // 再删除
+        boolean delResult = fileDelete(oldGroupName, oldFileName);
+        if (delResult) {
+            return null;
+        }
+        return fileUpload;
+    }
     /**
      * 文件删除
      *

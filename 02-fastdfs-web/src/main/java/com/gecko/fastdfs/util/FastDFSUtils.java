@@ -161,7 +161,28 @@ public class FastDFSUtils {
         return delete_file == 0;
     }
 
-
+    /**
+     * 修改一个已经存在的文件
+     *
+     * @param oldGroupName 旧组名
+     * @param oldFileName  旧文件名
+     * @param bytes         新文件
+     * @param fileName     新文件名
+     * @return
+     */
+    public static String modifyFile(String oldGroupName, String oldFileName, byte[] bytes, String fileName) {
+        // 先上传
+        String fileUpload = fileUpload(bytes, fileName);
+        if (fileUpload == null) {
+            return null;
+        }
+        // 再删除
+        boolean delResult = fileDelete(oldGroupName, oldFileName);
+        if (delResult) {
+            return null;
+        }
+        return fileUpload;
+    }
     /**
      * 获取元数据
      *
@@ -221,6 +242,5 @@ public class FastDFSUtils {
         }
         return fileName.substring(fileName.lastIndexOf(".")); // 带最后的点
     }
-
 
 }
