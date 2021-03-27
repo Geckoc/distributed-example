@@ -15,6 +15,11 @@
             <artifactId>amqp-client</artifactId>
             <version>5.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.gecko.rabbitmq</groupId>
+            <artifactId>01-rabbitmq-provider</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

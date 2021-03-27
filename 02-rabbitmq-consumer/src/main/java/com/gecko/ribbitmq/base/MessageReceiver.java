@@ -21,8 +21,6 @@ public class MessageReceiver {
         try {
             connection = factory.newConnection();
             channel = connection.createChannel();
-            // 重复声明消息队列
-            channel.queueDeclare("baseQueue", true, false, false, null);
             /*
               细节：如果消息发送者[生产者]已经声明了消息队列或交换机
               在消费者中则可不再次声明，生产者和消费者必须有一方声明消费队列或交换机
@@ -32,10 +30,11 @@ public class MessageReceiver {
               autoAck：true 代表当前的消费者自动消费这条消息，消息队列自动移除
                        false 手动应答，需再代码中进行手动确认操作，这样消息才会从消息队列移除
              */
+            channel.queueDeclare("baseQueue", true, false, false, null);
+            // 监听队列
             channel.basicConsume("baseQueue", true, new DefaultConsumer(channel){
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-//                    super.handleDelivery(consumerTag, envelope, properties, body);
                     String message = new String(body);
                     System.out.println("MessageContent >>> " + message);
                 }
@@ -43,7 +42,7 @@ public class MessageReceiver {
         } catch (IOException | TimeoutException e) {
             e.printStackTrace();
         } finally {
-            // 关闭资源 消费者如果关闭了资源，则接收不到消息
+            // 关闭资源 消费者如果关闭了资源，则一次只能消费一条消息
            /* try {
                 if (channel != null) {
                     channel.close();

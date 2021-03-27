@@ -1,6 +1,6 @@
 package com.gecko.rabbitmq.direct;
 
-import com.gecko.rabbitmq.util.RabbitMQConfig;
+import com.gecko.rabbitmq.util.RabbitMQUtil;
 import com.rabbitmq.client.Channel;
 
 import java.io.IOException;
@@ -12,12 +12,9 @@ import java.io.IOException;
  */
 public class SendDirectMessage {
     public static void main(String[] args) {
-
-        // 定义管道对象
-        Channel channel = null;
         try {
             // 获取实例管道对象
-            channel = RabbitMQConfig.getChannel();
+            Channel channel = RabbitMQUtil.getChannel();
             /*
                声明定义交换机
                 exchangeDeclare(String exchange, String type, boolean durable)
@@ -49,7 +46,7 @@ public class SendDirectMessage {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            RabbitMQConfig.releaseRabbitMQ();
+            RabbitMQUtil.releaseRabbitMQ();
         }
     }
 }
