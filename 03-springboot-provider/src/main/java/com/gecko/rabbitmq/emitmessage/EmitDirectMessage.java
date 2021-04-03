@@ -14,6 +14,5 @@ public class EmitDirectMessage {
     public void emit(){
         String message = "hello SpringBoot RabbitMQ";
         amqpTemplate.convertAndSend("directExchange" ,"directRoutingKey", message);
-
     }
 }

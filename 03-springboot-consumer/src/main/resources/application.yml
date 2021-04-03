@@ -5,7 +5,9 @@ server:
 spring:
   rabbitmq:
     port: 5672
-    host: 192.168.182.131
+    #  rabbitMQ集群端口
+    host: 192.168.182.135,192.168.182.134
+    #host: 192.168.182.131
     username: root
     password: root
     virtual-host: /

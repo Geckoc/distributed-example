@@ -5,7 +5,9 @@ server:
 spring:
   rabbitmq:
     port: 5672
-    host: 192.168.182.131
+    # 修改为rabbitMQ集群端口
+    host: 192.168.182.134,192.168.182.135
+    #host: 192.168.182.131
     username: root
     password: root
     virtual-host: /
